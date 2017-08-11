@@ -5,7 +5,16 @@ LoadingOverlay - A flexible loading overlay jQuery plugin
     License         : MIT
     Documentation   : http://gasparesganga.com/labs/jquery-loading-overlay/
 ****************************************************************************************************/
-(function($, undefined){
+(function( factory ) {
+    if ( typeof define === "function" && define.amd ) {
+        define( ["jquery"], factory );
+    } else if (typeof module === "object" && module.exports) {
+        module.exports = factory( require( "jquery" ) );
+    } else {
+        factory( jQuery );
+    }
+}(function( $ ) {
+
     // Default Settings
     var _defaults = {
         color           : "rgba(255, 255, 255, 0.8)",
@@ -59,7 +68,7 @@ LoadingOverlay - A flexible loading overlay jQuery plugin
         var wholePage   = container.is("body");
         var count       = container.data("LoadingOverlayCount");
         if (count === undefined) count = 0;
-        if (count == 0) {
+        if (count === 0) {
             var overlay = $("<div>", {
                 class   : "loadingoverlay",
                 css     : {
@@ -90,7 +99,7 @@ LoadingOverlay - A flexible loading overlay jQuery plugin
                     "height"    : "100%"
                 });
             } else {
-                overlay.css("position", (container.css("position") == "fixed") ? "fixed" : "absolute");
+                overlay.css("position", (container.css("position") === "fixed") ? "fixed" : "absolute");
             }
             _Resize(container, overlay, settings, wholePage);
             if (settings.resizeInterval > 0) {
@@ -103,7 +112,7 @@ LoadingOverlay - A flexible loading overlay jQuery plugin
                 settings.fade = [0, 0];
             } else if (settings.fade === true) {
                 settings.fade = [400, 200];
-            } else if (typeof settings.fade == "string" || typeof settings.fade == "number") {
+            } else if (typeof settings.fade === "string" || typeof settings.fade === "number") {
                 settings.fade = [settings.fade, settings.fade];
             }
             container.data({
@@ -138,7 +147,7 @@ LoadingOverlay - A flexible loading overlay jQuery plugin
     
     function _Resize(container, overlay, settings, wholePage){
         if (!wholePage) {
-            var x = (container.css("position") == "fixed") ? container.position() : container.offset();
+            var x = (container.css("position") === "fixed") ? container.position() : container.offset();
             overlay.css({
                 top     : x.top + parseInt(container.css("border-top-width"), 10),
                 left    : x.left + parseInt(container.css("border-left-width"), 10),
@@ -148,7 +157,7 @@ LoadingOverlay - A flexible loading overlay jQuery plugin
         }
         var c    = wholePage ? $(window) : container;
         var size = "auto";
-        if (settings.size && settings.size != "auto") {
+        if (settings.size && settings.size !== "auto") {
             size = Math.min(c.innerWidth(), c.innerHeight()) * parseFloat(settings.size) / 100;
             if (settings.maxSize && size > parseInt(settings.maxSize, 10)) size = parseInt(settings.maxSize, 10) + "px";
             if (settings.minSize && size < parseInt(settings.minSize, 10)) size = parseInt(settings.minSize, 10) + "px";
@@ -156,5 +165,5 @@ LoadingOverlay - A flexible loading overlay jQuery plugin
         overlay.css("background-size", size);
         overlay.children(".loadingoverlay_fontawesome").css("font-size", size);
     }
-    
-}(jQuery));
+return $;
+}));
